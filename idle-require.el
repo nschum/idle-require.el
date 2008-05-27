@@ -1,10 +1,10 @@
 ;;; idle-require.el --- load elisp libraries while Emacs is idle
 ;;
-;; Copyright (C) 2007 Nikolaj Schumacher
+;; Copyright (C) 2007-2008 Nikolaj Schumacher
 ;;
 ;; Author: Nikolaj Schumacher <bugs * nschum de>
-;; Version: 0.9
-;; Keywords: convenience, matching
+;; Version: 1.0
+;; Keywords: internal
 ;; URL: http://nschum.de/src/emacs/idle-require/
 ;; Compatibility: GNU Emacs 21.x, GNU Emacs 22.x
 ;;
@@ -28,8 +28,9 @@
 ;;
 ;; Add the following to your .emacs file:
 ;; (require 'idle-require)
-;; (setq idle-require-symbols '(cedet nxml-mode)) ;; <- your wishes here
-;; (idle-require-mode 1)
+;; (setq idle-require-symbols '(cedet nxml-mode)) ;; <- Specify packages here.
+;; (idle-require 'cedet) ;; <- Or like this.
+;; (idle-require-mode 1) ;; starts loading
 ;;
 ;; As soon as Emacs goes idle for `idle-require-idle-delay' seconds,
 ;; `idle-require-mode' will start loading the files, symbols or functions in
@@ -40,6 +41,9 @@
 ;; Otherwise, you might create 100% CPU load on your system.
 ;;
 ;;; Change Log:
+;;
+;; 2008-02-26 (1.0)
+;;    Added convenience function `idle-require'.
 ;;
 ;; 2007-05-04 (0.9)
 ;;    Initial release.
@@ -70,13 +74,18 @@ This list may contain either autoload functions, file names or features.")
 (defvar idle-require-timer nil)
 
 ;;;###autoload
+(defun idle-require (symbol)
+  "Add SYMBOL to `idle-require-symbols'."
+  (push symbol idle-require-symbols))
+
+;;;###autoload
 (define-minor-mode idle-require-mode
   "Load unloaded autoload functions when Emacs becomes idle.
 If `idle-require-symbols' is a list of files, those will be loaded.
 Otherwise all autoload functions will be loaded.
 
 Loading all autoload functions can easily triple Emacs' memory footprint."
-  nil " iload" nil
+  nil " idle-req" nil
   (if idle-require-mode
       ;; on
       (progn
