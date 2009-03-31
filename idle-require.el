@@ -125,4 +125,5 @@ Loading all autoload functions can easily triple Emacs' memory footprint."
     (idle-require-mode 0)
     (message "idle-require finished")))
 
+(provide 'idle-require)
 ;;; idle-require.el ends here
