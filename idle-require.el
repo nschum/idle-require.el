@@ -42,6 +42,8 @@
 ;;
 ;;; Change Log:
 ;;
+;;    Made `idle-require' parameters compatible to `require'.
+;;
 ;; 2008-02-26 (1.0)
 ;;    Added convenience function `idle-require'.
 ;;
@@ -74,9 +76,12 @@ This list may contain either autoload functions, file names or features.")
 (defvar idle-require-timer nil)
 
 ;;;###autoload
-(defun idle-require (symbol)
-  "Add SYMBOL to `idle-require-symbols'."
-  (push symbol idle-require-symbols))
+(defun idle-require (feature &optional filename noerror)
+  "Add FEATURE to `idle-require-symbols'.
+FILENAME and NOERROR are provided for compatibility to `require'.  If FILENAME
+is non-nil, it is added instead of FEATURE.  NOERROR has no effect as that is
+the default."
+  (push (or filename feature) idle-require-symbols))
 
 ;;;###autoload
 (define-minor-mode idle-require-mode
