@@ -42,6 +42,7 @@
 ;;
 ;;; Change Log:
 ;;
+;;    The order of calls to `idle-require' is now maintained.
 ;;    Made `idle-require' parameters compatible to `require'.
 ;;
 ;; 2008-02-26 (1.0)
@@ -81,7 +82,7 @@ This list may contain either autoload functions, file names or features.")
 FILENAME and NOERROR are provided for compatibility to `require'.  If FILENAME
 is non-nil, it is added instead of FEATURE.  NOERROR has no effect as that is
 the default."
-  (push (or filename feature) idle-require-symbols))
+  (add-to-list 'idle-require-symbols (or filename feature) t))
 
 ;;;###autoload
 (define-minor-mode idle-require-mode
